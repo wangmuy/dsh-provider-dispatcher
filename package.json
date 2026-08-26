@@ -1,0 +1,30 @@
+{
+  "name": "@dsh/provider-dispatcher",
+  "description": "A generic provider-dispatcher proxy for DeepSeek Harness. Mounts child plugins under a private isolate realm, records every register* call, and fans one operation out to all recorded children with a configurable strategy (parallel merge / race / bail).",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./web-search-merge": "./src/web-search-merge.js",
+    "./web-search-setup": "./src/web-search-setup.js",
+    "./web-fetch-setup": "./src/web-fetch-setup.js",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "src",
+    "cordis.patch.yml"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/dsh-llm": "*",
+    "@deepseek-ai/schemastery": "*"
+  }
+}

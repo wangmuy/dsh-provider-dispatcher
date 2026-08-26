@@ -1,0 +1,12 @@
+# The provider-dispatcher bundle. The plugin is a generic provider
+# dispatcher: it mounts child plugins under a private isolate realm, records
+# every `register*` call they make, and lets a `setup` script build a proxy
+# provider.
+#
+# `inject` and `setup` are required at apply time — the empty shell below
+# waits for the profile layer to fill them in. Override this row in the
+# profile's cordis.patch.yml.
+- insert:
+    - id: provider-dispatcher
+      name: '@dsh/provider-dispatcher'
+      config: {}

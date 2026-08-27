@@ -12,18 +12,18 @@ web search, web fetch, LSP, subagents, or any other capability. A setup script
 decides which services to isolate, which registries to provide, and what proxy
 to register.
 
-**How children are combined:**
+Two setup scripts ship beside the framework as examples:
 
-| Strategy | Meaning |
-|---|---|
-| `parallel` | Run every child, merge the results (search: dedup sources). |
-| `parallel` (fetch) | Race every child, first success wins. |
-| `bail` | Try children in order, first success wins. |
-
-Two setup scripts ship beside the framework:
 - **`web-search-setup`** — dispatches to `registerSearchProvider` calls.
-- **`web-fetch-setup`** — dispatches to `registerFetchProvider` calls (race for
-  the fastest result).
+  Supports `parallel` (run every child, merge results) and `bail` (try in
+  order, first success wins).
+- **`web-fetch-setup`** — dispatches to `registerFetchProvider` calls.
+  Supports `parallel` (race every child, first success wins) and `bail` (try
+  in order, first success wins).
+
+The `strategy` and the child combination logic are part of the setup script,
+not the framework. Write a custom setup script to define your own combination
+behavior.
 
 ## Quick start
 

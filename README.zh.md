@@ -4,17 +4,14 @@
 
 框架本身**与具体能力无关**:它不内置对 web 搜索、web 抓取、LSP、子代理或任何其他能力的偏好。由 setup 脚本决定要隔离哪些 service、提供哪些 registry、注册什么样的代理。
 
-**子插件的组合方式:**
+框架附带两个 setup 脚本作为示例:
 
-| 策略 | 含义 |
-|---|---|
-| `parallel` | 并发运行所有子插件,合并结果(搜索:去重 sources)。 |
-| `parallel`(抓取) | 并发竞速,第一个成功者胜出。 |
-| `bail` | 顺序尝试,第一个成功者胜出。 |
-
-框架附带两个 setup 脚本:
 - **`web-search-setup`** — 分发 `registerSearchProvider` 调用。
-- **`web-fetch-setup`** — 分发 `registerFetchProvider` 调用(竞速取最快结果)。
+  支持 `parallel`(并发运行所有子插件,合并结果)和 `bail`(顺序尝试,第一个成功者胜出)。
+- **`web-fetch-setup`** — 分发 `registerFetchProvider` 调用。
+  支持 `parallel`(并发竞速,第一个成功者胜出)和 `bail`(顺序尝试,第一个成功者胜出)。
+
+`strategy` 和子插件组合逻辑属于 setup 脚本,不属于框架本身。编写自定义 setup 脚本即可定义自己的组合行为。
 
 ## 快速上手
 

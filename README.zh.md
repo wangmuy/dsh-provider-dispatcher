@@ -220,6 +220,14 @@ src/
 └── web-fetch-setup.js    # setup 脚本:web 抓取分发(竞速、短路、顺序)
 ```
 
+## 测试
+
+```sh
+pnpm run test
+```
+
+单元测试覆盖核心逻辑(`createRecordingRegistry`、`applyToolRemap`)和子插件生命周期(挂载、卸载、重新挂载)。测试独立运行,无需 DeepSeek Harness 仓库环境。
+
 ## 已知限制
 
 - **`ctx.isolate('web')` + `provide('web', ...)` 可能通过 Cordis 的 trace proxying 影响 `ctx.web`。** 内置的 setup 脚本在 isolate 之前保存 `const globalWeb = ctx.web` 来规避此问题。新的 setup 脚本应遵循同样的模式。

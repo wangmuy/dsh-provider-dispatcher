@@ -38,8 +38,17 @@ export default async function setup(ctx, config, helpers) {
       const privateCtx = ctx.isolate('web').isolate('tools').isolate('systemPrompt')
       privateCtx.provide('web', recordingWeb)
       privateCtx.provide('tools', recordingTools)
-      await helpers.mountChildren(privateCtx, children)
-      helpers.applyToolRemap(ctx, recordingTools, params.toolRemap)
+      const fibers = await helpers.mountChildren(privateCtx, children)
+      let remapDispose = helpers.applyToolRemap(ctx, recordingTools, params.toolRemap)
+      const reapplyRemap = () => {
+        remapDispose()
+        remapDispose = helpers.applyToolRemap(ctx, recordingTools, params.toolRemap)
+      }
+      for (const fiber of fibers) {
+        ctx.on('internal/status', () => {
+          if (fiber.state === 'ACTIVE') reapplyRemap()
+        })
+      }
       return { recordingWeb, recordingTools }
     })()
     return mounted

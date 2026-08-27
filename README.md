@@ -245,6 +245,16 @@ src/
 └── web-fetch-setup.js    # Setup script: web fetch dispatch (race, bail)
 ```
 
+## Tests
+
+```sh
+pnpm run test
+```
+
+Unit tests cover the core logic (`createRecordingRegistry`, `applyToolRemap`)
+and child lifecycle (mount, unmount, remount). Tests run independently — no
+DeepSeek Harness checkout required.
+
 ## Known Limitations
 
 - **`ctx.isolate('web')` + `provide('web', ...)` can affect `ctx.web` through Cordis

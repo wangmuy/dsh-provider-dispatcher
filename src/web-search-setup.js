@@ -25,10 +25,20 @@ export default async function setup(ctx, config, helpers) {
       const privateCtx = ctx.isolate('web').isolate('tools').isolate('systemPrompt')
       privateCtx.provide('web', recordingWeb)
       privateCtx.provide('tools', recordingTools)
-      await helpers.mountChildren(privateCtx, children)
-      // After children have loaded, apply tool remap: captured tools can be
-      // re-registered under new names into the global tools registry.
-      helpers.applyToolRemap(ctx, recordingTools, params.toolRemap)
+      const fibers = await helpers.mountChildren(privateCtx, children)
+      // After children have loaded, apply tool remap.
+      let remapDispose = helpers.applyToolRemap(ctx, recordingTools, params.toolRemap)
+      // Re-apply remap whenever a child fiber reaches ACTIVE (e.g. after HMR),
+      // disposing the old remapped tools first to avoid duplicates.
+      const reapplyRemap = () => {
+        remapDispose()
+        remapDispose = helpers.applyToolRemap(ctx, recordingTools, params.toolRemap)
+      }
+      for (const fiber of fibers) {
+        ctx.on('internal/status', () => {
+          if (fiber.state === 'ACTIVE') reapplyRemap()
+        })
+      }
       return { recordingWeb, recordingTools }
     })()
     return mounted

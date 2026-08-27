@@ -91,15 +91,23 @@ export const Config = z.object({
 
 /**
  * Mount every child plugin under `ctx`, recording their registrations into
- * the returned recording registry.
+ * the returned recording registry. Returns the list of child fibers.
  */
-async function mountChildren(ctx, children) {
+export async function mountChildren(ctx, children) {
+  const fibers = []
   for (const child of children) {
     const mod = await import(child.name)
     const plugin = mod.default ?? mod
-    await ctx.plugin(plugin, child.config)
+    try {
+      const fiber = await ctx.plugin(plugin, child.config)
+      fibers.push(fiber)
+    } catch (error) {
+      // Child load failure: log and continue, so one broken child does not
+      // block the others or the host dispatcher.
+      ctx.logger?.warn(`provider-dispatcher: child "${child.name}" failed to load: ${error.message}`)
+    }
   }
-  return ctx
+  return fibers
 }
 
 /** Load a default-exported function module, or undefined when spec is absent. */
@@ -119,22 +127,35 @@ async function loadModuleDefault(spec) {
  * re-register it under the new name in the global tools registry. Tools not
  * listed in `remap` stay shielded (never enter the global registry).
  *
+ * Returns a disposer that unregisters every re-mapped tool. The caller owns
+ * calling this disposer before re-applying (e.g. when a child reloads), so it
+ * can replace rather than duplicate.
+ *
  * @param {import('@deepseek-ai/cordis').Context} ctx - global context
  * @param {*} recordingTools - recording registry with captured tools
  * @param {Record<string, string> | undefined} remap - original name → new name
+ * @returns {() => void} disposer that unregisters all re-mapped tools
  */
-function applyToolRemap(ctx, recordingTools, remap) {
-  if (!remap || typeof remap !== 'object') return
+export function applyToolRemap(ctx, recordingTools, remap) {
+  const disposers = []
+  if (!remap || typeof remap !== 'object') return () => {}
   const captured = recordingTools.registrations.get('register')
-  if (!captured || captured.length === 0) return
+  if (!captured || captured.length === 0) return () => {}
 
   const globalTools = ctx.get('tools')
-  if (!globalTools) return
+  if (!globalTools) return () => {}
 
   for (const toolDef of captured) {
     const newName = remap[toolDef.name]
     if (newName && newName !== toolDef.name) {
-      globalTools.register({ ...toolDef, name: newName })
+      const dispose = globalTools.register({ ...toolDef, name: newName })
+      disposers.push(dispose)
+    }
+  }
+
+  return () => {
+    for (const dispose of disposers.splice(0)) {
+      try { dispose() } catch { /* best effort */ }
     }
   }
 }

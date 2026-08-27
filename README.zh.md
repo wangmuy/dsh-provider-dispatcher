@@ -1,8 +1,16 @@
 # @dsh/provider-dispatcher
 
-一个用于 DeepSeek Harness 的通用 provider 分发代理。它在私有 isolate 作用域中挂载子插件,捕获子插件发出的每一个 `register*` 调用,然后让用户提供的 **setup 脚本**构建一个代理 provider,把一次操作分发给所有被记录的子 provider。
+一个用于 DeepSeek Harness 的通用 provider 分发器,让**多个子插件在同一个能力后共存并协同工作**。每个子插件就是普通的 DSH 插件——沿用相同的 `inject`/`apply`/`Config` 约定,享有相同的生命周期——被挂载在私有 isolate 作用域中。子插件发出的每一个 `register*` 调用都被捕获,然后由用户提供的 **setup 脚本**构建一个代理 provider,把一次操作分发给所有被记录的子 provider。
 
 框架本身**与具体能力无关**:它不内置对 web 搜索、web 抓取、LSP、子代理或任何其他能力的偏好。由 setup 脚本决定要隔离哪些 service、提供哪些 registry、注册什么样的代理。
+
+**子插件的组合方式:**
+
+| 策略 | 含义 |
+|---|---|
+| `parallel` | 并发运行所有子插件,合并结果(搜索:去重 sources)。 |
+| `parallel`(抓取) | 并发竞速,第一个成功者胜出。 |
+| `bail` | 顺序尝试,第一个成功者胜出。 |
 
 框架附带两个 setup 脚本:
 - **`web-search-setup`** — 分发 `registerSearchProvider` 调用。

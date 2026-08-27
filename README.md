@@ -1,14 +1,24 @@
 # @dsh/provider-dispatcher
 
-A generic provider-dispatcher proxy for DeepSeek Harness. It mounts child
-plugins under a private isolate realm where every `register*` call they make is
-captured, then lets a user-supplied **setup script** build a proxy provider that
-fans one operation out to all recorded children.
+A generic provider dispatcher for DeepSeek Harness that lets **multiple child
+plugins work together behind one capability**. Each child is an ordinary DSH
+plugin — the same `inject`/`apply`/`Config` conventions, the same lifecycle —
+mounted under a private isolate realm. Every `register*` call a child makes is
+captured, and a **setup script** builds a proxy that fans one operation out to
+all recorded children.
 
-The framework itself is **capability-agnostic**: it has no built-in preferences
-for web search, web fetch, LSP, subagents, or any other capability. A setup
-script decides which services to isolate, which registries to provide, and what
-proxy to register.
+The framework is **capability-agnostic**: it has no built-in preferences for
+web search, web fetch, LSP, subagents, or any other capability. A setup script
+decides which services to isolate, which registries to provide, and what proxy
+to register.
+
+**How children are combined:**
+
+| Strategy | Meaning |
+|---|---|
+| `parallel` | Run every child, merge the results (search: dedup sources). |
+| `parallel` (fetch) | Race every child, first success wins. |
+| `bail` | Try children in order, first success wins. |
 
 Two setup scripts ship beside the framework:
 - **`web-search-setup`** — dispatches to `registerSearchProvider` calls.

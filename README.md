@@ -1,5 +1,7 @@
 # @dsh/provider-dispatcher
 
+English | [中文](README.zh.md)
+
 A generic provider dispatcher for DeepSeek Harness that lets **multiple child
 plugins work together behind one capability**. Each child is an ordinary DSH
 plugin — the same `inject`/`apply`/`Config` conventions, the same lifecycle —

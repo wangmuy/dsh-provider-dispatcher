@@ -8,5 +8,5 @@
 # profile's cordis.patch.yml.
 - insert:
     - id: provider-dispatcher
-      name: '@dsh/provider-dispatcher'
+      name: '@wangmuy/dsh-provider-dispatcher'
       config: {}

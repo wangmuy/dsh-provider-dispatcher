@@ -1,9 +1,15 @@
 {
-  "name": "@dsh/provider-dispatcher",
+  "name": "@wangmuy/dsh-provider-dispatcher",
   "description": "A generic provider-dispatcher proxy for DeepSeek Harness. Mounts child plugins under a private isolate realm, records every register* call, and fans one operation out to all recorded children with a configurable strategy (parallel merge / race / bail).",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wangmuy/dsh-provider-dispatcher.git"
+  },
+  "author": "wangmuy",
   "main": "src/index.js",
   "exports": {
     ".": "./src/index.js",
@@ -14,6 +20,8 @@
   },
   "files": [
     "src",
+    "LICENSE",
+    "README.md",
     "cordis.patch.yml"
   ],
   "dsh": {

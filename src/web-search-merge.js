@@ -37,3 +37,5 @@ export default function merge(outcomes, request, options) {
     truncated: merged.length > capped.length,
   }
 }
+
+export { merge }

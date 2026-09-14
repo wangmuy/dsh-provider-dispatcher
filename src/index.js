@@ -12,7 +12,7 @@
  *
  * Plain ESM JavaScript so a published dsh can load it from node_modules.
  *
- * @module @dsh/provider-dispatcher
+ * @module @wangmuy/dsh-provider-dispatcher
  */
 
 import z from '@deepseek-ai/schemastery'

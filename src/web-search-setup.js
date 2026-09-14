@@ -88,3 +88,5 @@ export default async function setup(ctx, config, helpers) {
     },
   })
 }
+
+export { setup }

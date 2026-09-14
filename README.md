@@ -1,4 +1,4 @@
-# @dsh/provider-dispatcher
+# @wangmuy/dsh-provider-dispatcher
 
 English | [中文](README.zh.md)
 
@@ -62,11 +62,11 @@ it or add more rows in the profile's `cordis.patch.yml`:
 - id: provider-dispatcher
   config:
     inject: ['web']
-    setup: '@dsh/provider-dispatcher/web-search-setup'
+    setup: '@wangmuy/dsh-provider-dispatcher/web-search-setup'
     params:
       providerId: dispatcher-search
       strategy: parallel
-      merge: '@dsh/provider-dispatcher/web-search-merge'
+      merge: '@wangmuy/dsh-provider-dispatcher/web-search-merge'
       tolerateFailures: true
     children:
       - name: '@liustack/modsearch'
@@ -77,10 +77,10 @@ it or add more rows in the profile's `cordis.patch.yml`:
 # Aggregate web fetch providers (race curl / pwsh for the fastest result).
 - insert:
     - id: dispatcher-fetch
-      name: '@dsh/provider-dispatcher'
+      name: '@wangmuy/dsh-provider-dispatcher'
       config:
         inject: ['web']
-        setup: '@dsh/provider-dispatcher/web-fetch-setup'
+        setup: '@wangmuy/dsh-provider-dispatcher/web-fetch-setup'
         params:
           providerId: dispatcher-fetch
           strategy: parallel
@@ -170,14 +170,14 @@ mounting, and proxy registration. The framework only calls it.
 
 | Script | What it dispatches |
 |---|---|
-| `@dsh/provider-dispatcher/web-search-setup` | Web search providers (`registerSearchProvider`). |
-| `@dsh/provider-dispatcher/web-fetch-setup` | Web fetch providers (`registerFetchProvider`). |
+| `@wangmuy/dsh-provider-dispatcher/web-search-setup` | Web search providers (`registerSearchProvider`). |
+| `@wangmuy/dsh-provider-dispatcher/web-fetch-setup` | Web fetch providers (`registerFetchProvider`). |
 
 ## Bundled merge functions
 
 | Script | What it merges |
 |---|---|
-| `@dsh/provider-dispatcher/web-search-merge` | Web search results (dedup sources, cap maxResults). |
+| `@wangmuy/dsh-provider-dispatcher/web-search-merge` | Web search results (dedup sources, cap maxResults). |
 
 The web-fetch setup does not need a dedicated merge function: `parallel` races
 for the fastest result, `bail`/`bail` return the first success.

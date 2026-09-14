@@ -1,4 +1,4 @@
-# @dsh/provider-dispatcher
+# @wangmuy/dsh-provider-dispatcher
 
 一个用于 DeepSeek Harness 的通用 provider 分发器,让**多个子插件在同一个能力后共存并协同工作**。每个子插件就是普通的 DSH 插件——沿用相同的 `inject`/`apply`/`Config` 约定,享有相同的生命周期——被挂载在私有 isolate 作用域中。子插件发出的每一个 `register*` 调用都被捕获,然后由用户提供的 **setup 脚本**构建一个代理 provider,把一次操作分发给所有被记录的子 provider。
 
@@ -43,11 +43,11 @@ dsh plugin --profile <name> add file:E:/path/to/dsh-plugins/provider-dispatcher
 - id: provider-dispatcher
   config:
     inject: ['web']
-    setup: '@dsh/provider-dispatcher/web-search-setup'
+    setup: '@wangmuy/dsh-provider-dispatcher/web-search-setup'
     params:
       providerId: dispatcher-search
       strategy: parallel
-      merge: '@dsh/provider-dispatcher/web-search-merge'
+      merge: '@wangmuy/dsh-provider-dispatcher/web-search-merge'
       tolerateFailures: true
     children:
       - name: '@liustack/modsearch'
@@ -58,10 +58,10 @@ dsh plugin --profile <name> add file:E:/path/to/dsh-plugins/provider-dispatcher
 # 分发 web 抓取 provider(curl 和 pwsh 竞速,取最快的结果)。
 - insert:
     - id: dispatcher-fetch
-      name: '@dsh/provider-dispatcher'
+      name: '@wangmuy/dsh-provider-dispatcher'
       config:
         inject: ['web']
-        setup: '@dsh/provider-dispatcher/web-fetch-setup'
+        setup: '@wangmuy/dsh-provider-dispatcher/web-fetch-setup'
         params:
           providerId: dispatcher-fetch
           strategy: parallel
@@ -143,14 +143,14 @@ export default async function setup(ctx, config, helpers) {
 
 | 脚本 | 分发什么 |
 |---|---|
-| `@dsh/provider-dispatcher/web-search-setup` | Web 搜索 provider(`registerSearchProvider`)。 |
-| `@dsh/provider-dispatcher/web-fetch-setup` | Web 抓取 provider(`registerFetchProvider`)。 |
+| `@wangmuy/dsh-provider-dispatcher/web-search-setup` | Web 搜索 provider(`registerSearchProvider`)。 |
+| `@wangmuy/dsh-provider-dispatcher/web-fetch-setup` | Web 抓取 provider(`registerFetchProvider`)。 |
 
 ## 内置的 merge 函数
 
 | 脚本 | 合并什么 |
 |---|---|
-| `@dsh/provider-dispatcher/web-search-merge` | Web 搜索结果(按 URL 去重、按 maxResults 截断)。 |
+| `@wangmuy/dsh-provider-dispatcher/web-search-merge` | Web 搜索结果(按 URL 去重、按 maxResults 截断)。 |
 
 web-fetch setup 不需要专用的 merge 函数:`parallel` 竞速取最快结果,`bail`/`bail` 返回第一个成功。
 

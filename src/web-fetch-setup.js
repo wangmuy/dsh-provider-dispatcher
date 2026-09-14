@@ -14,7 +14,7 @@
  *   - id: provider-dispatcher
  *     config:
  *       inject: ['web']
- *       setup: '@dsh/provider-dispatcher/web-fetch-setup'
+ *       setup: '@wangmuy/dsh-provider-dispatcher/web-fetch-setup'
  *       params:
  *         providerId: dispatcher-fetch
  *         strategy: parallel
@@ -106,3 +106,5 @@ export default async function setup(ctx, config, helpers) {
     },
   })
 }
+
+export { setup }

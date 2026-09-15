@@ -32,13 +32,13 @@ behavior.
 ### Install from npm
 
 ```sh
-dsh plugin --profile <name> add @wangmuy/dsh-provider-dispatcher
+dsh plugin --profile web add @wangmuy/dsh-provider-dispatcher
 ```
 
 ### Install from source
 
 ```sh
-dsh plugin --profile <name> add file:E:/path/to/dsh-plugins/provider-dispatcher
+dsh plugin --profile web add file:E:/path/to/dsh-plugins/provider-dispatcher
 ```
 
 > **Important: child plugins that are also bundles must be removed from

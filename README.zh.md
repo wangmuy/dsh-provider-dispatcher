@@ -18,13 +18,13 @@
 ### 从 npm 安装
 
 ```sh
-dsh plugin --profile <name> add @wangmuy/dsh-provider-dispatcher
+dsh plugin --profile web add @wangmuy/dsh-provider-dispatcher
 ```
 
 ### 从源码安装
 
 ```sh
-dsh plugin --profile <name> add file:E:/path/to/dsh-plugins/provider-dispatcher
+dsh plugin --profile web add file:E:/path/to/dsh-plugins/provider-dispatcher
 ```
 
 > **重要:同时是 bundle 的子插件必须从 `dsh.profile.bundles` 中移除。** 如果子插件(如 `@liustack/modsearch`)同时出现在 `bundles` 和 `children` 中,其 bundle 层仍会直接注册进全局 `ctx.web`/`ctx.tools`,绕过分发代理。请将其从 `bundles` 中移除,只保留在 `children` 中。

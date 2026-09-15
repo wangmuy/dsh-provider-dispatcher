@@ -29,7 +29,13 @@ behavior.
 
 ## Quick start
 
-Install the bundle into a profile:
+### Install from npm
+
+```sh
+dsh plugin --profile <name> add @wangmuy/dsh-provider-dispatcher
+```
+
+### Install from source
 
 ```sh
 dsh plugin --profile <name> add file:E:/path/to/dsh-plugins/provider-dispatcher

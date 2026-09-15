@@ -15,7 +15,13 @@
 
 ## 快速上手
 
-把 bundle 安装进某个 profile:
+### 从 npm 安装
+
+```sh
+dsh plugin --profile <name> add @wangmuy/dsh-provider-dispatcher
+```
+
+### 从源码安装
 
 ```sh
 dsh plugin --profile <name> add file:E:/path/to/dsh-plugins/provider-dispatcher
